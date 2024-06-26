@@ -33,6 +33,10 @@ export class CreateMovieDto {
     @IsString()
     @IsOptional()
     trailer: string
+
+    @IsString()
+    @IsOptional()
+    description: string
 }
 
 export class MovieDto {
@@ -53,6 +57,8 @@ export class MovieDto {
 
     creator: { id: number, name: string }
 
+    description: string
+
 
     public static create(movie: Movie) {
         const dto = new MovieDto()
@@ -64,6 +70,7 @@ export class MovieDto {
         dto.category = movie.category
         dto.yearReleased = movie.yearReleased
         dto.creator = { id: movie.user.id, name: movie.user.name }
+        dto.description = movie.description
 
         return dto
     }

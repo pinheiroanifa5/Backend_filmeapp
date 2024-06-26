@@ -4,6 +4,7 @@ import { GetUser } from 'src/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreateMovieDto, MovieDto } from './movies.dto';
 import { EditMovieDto } from './dto';
+import { get } from 'http';
 
 
 @UseGuards(JwtGuard)
@@ -35,7 +36,30 @@ export class MoviesController {
   }
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() data: EditMovieDto, @GetUser("id") userId: number): Promise<MovieDto> {
+
     return await this.movieService.editMovie(userId, id, data);
+  }
+
+  @Post("myList/:id")
+  async addToMyList(
+    @Param("id", ParseIntPipe) movieId: number,
+    @GetUser("id") userId: number
+  ) {
+    return await this.movieService.addMovieToMyList(userId, movieId)
+  }
+
+  @Delete("myList/:id")
+  async removeFromMyList(
+    @Param("id", ParseIntPipe) movieId: number,
+    @GetUser("id") userId: number
+  ) {
+    return await this.movieService.removeMovieFromMyList(userId, movieId)
+  }
+  @Get("myList")
+  async getMoviesToMyList(
+    @GetUser("id") userId: number
+  ) {
+    return await this.movieService.getMoviesToMyList(userId)
   }
 
 }
