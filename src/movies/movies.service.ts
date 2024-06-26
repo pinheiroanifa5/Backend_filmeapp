@@ -25,7 +25,10 @@ export class MoviesService {
             {
                 where,
                 skip,
-                take
+                take,
+                include: {
+                    user: true
+                }
             }
         )
 
@@ -91,6 +94,7 @@ export class MoviesService {
                 where: {
                     id
                 },
+                include: { user: true },
                 data
             })
             return MovieDto.create(updatedMovie)

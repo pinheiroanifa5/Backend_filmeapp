@@ -1,5 +1,12 @@
-import { Category, Movie } from "@prisma/client";
+import { Category, Prisma, } from "@prisma/client";
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+
+
+type Movie = Prisma.MovieGetPayload<{
+    include: {
+        user: true
+    }
+}>
 
 export class CreateMovieDto {
 
@@ -42,9 +49,9 @@ export class MovieDto {
 
     category: string;
 
-    creatorId: number
-
     trailer: string
+
+    creator: { id: number, name: string }
 
 
     public static create(movie: Movie) {
@@ -55,8 +62,8 @@ export class MovieDto {
         dto.trailer = movie.trailer
         dto.name = movie.movieName
         dto.category = movie.category
-        dto.creatorId = movie.userId
         dto.yearReleased = movie.yearReleased
+        dto.creator = { id: movie.user.id, name: movie.user.name }
 
         return dto
     }
