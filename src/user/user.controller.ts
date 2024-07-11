@@ -24,27 +24,29 @@ import { Roles } from 'src/decorator/roles.decorator';
 @Controller('users')
 export class UserController {
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
-  @Get()
+  @Get("all")
   @Roles(Role.ADMIN) // Get /users ou /users?role=value
-  findAll() {
-      return this.userService.findAll();
+  async findAll() {
+    return await this.userService.findAll();
   }
 
   @Get('/me') // GET /users/:id
-  findOne(@GetUser("id") id:number) {
-      return this.userService.findOne(id);
+  findOne(@GetUser("id") id: number) {
+    return this.userService.findOne(id);
   }
 
 
   @Patch('/me') // PATCH /users/:id
-  update( @Body() updateUserDto: UpdateUserDto,@GetUser("id") id:number) {
-      return this.userService.editUser(id, updateUserDto);
+  update(@Body() updateUserDto: UpdateUserDto, @GetUser("id") id: number) {
+    return this.userService.editUser(id, updateUserDto);
   }
 
-  @Delete('/me') // DELETE /users/:id
-  delete(@GetUser("id") id:number) {
-      return this.userService.delete(id);
+  @Delete(':id') // DELETE /users/:id
+  @Roles(Role.ADMIN)
+  async delete(@Param("id", ParseIntPipe) id: number) {
+    return await this.userService.delete(id);
   }
+
 }

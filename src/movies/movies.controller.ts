@@ -4,7 +4,6 @@ import { GetUser } from 'src/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreateMovieDto, MovieDto } from './movies.dto';
 import { EditMovieDto } from './dto';
-import { get } from 'http';
 
 
 @UseGuards(JwtGuard)
@@ -55,7 +54,7 @@ export class MoviesController {
   ) {
     return await this.movieService.removeMovieFromMyList(userId, movieId)
   }
-  @Get("myList")
+  @Get("myList/me")
   async getMoviesToMyList(
     @GetUser("id") userId: number
   ) {
